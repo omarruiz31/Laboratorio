@@ -1,50 +1,60 @@
 public class BilleteraParque {
-    private int tickets;
-    private static boolean festivo;
+    private int saldoTickets;
+    private static boolean diaFestivo = false;
 
-    public BilleteraParque(){
-        this.tickets = 0;
+    public BilleteraParque() {
+        this.saldoTickets = 0;
     }
 
-    public BilleteraParque(int tickets){
-        this.tickets = tickets;
+    public BilleteraParque(int saldoTickets) {
+        this.saldoTickets = saldoTickets;
     }
 
-    //Getters
-
-    public int getTickets(){
-        return tickets;
+    public int getTickets() {
+        return saldoTickets;
     }
 
-    public static boolean getFestivo(){
-        return festivo;
-    }
-
-    public void setTickets(int tickets){
-        if (tickets > 0){
-            this.tickets = tickets;
+    public void setTickets(int saldoTickets) {
+        if (saldoTickets >= 0) {
+            this.saldoTickets = saldoTickets;
         }
     }
 
-    public static void  setFestivo(){
-        festivo = true;
+    public void establecerTickets(int saldoTickets) {
+        setTickets(saldoTickets);
     }
 
-    public void agregarTickets(int tickets){
-        if (tickets >= 0){
-            this.tickets += tickets;
-        }
+    public static boolean isFestivo() {
+        return diaFestivo;
     }
 
-    public boolean removerTickets(int tickets){
-        if (tickets >= 0 && this.tickets >= tickets){
-            this.tickets -= tickets;
+    public static void cambiarFestivo() {
+        diaFestivo = !diaFestivo;
+    }
+
+    public void agregarTickets(int cantidad) {
+        this.saldoTickets += cantidad;
+    }
+
+    public boolean removerTickets(int cantidad) {
+        if (cantidad > 0 && this.saldoTickets >= cantidad) {
+            this.saldoTickets -= cantidad;
             return true;
         }
-        else{
+        return false;
+    }
+
+    public boolean comprarPremio(Premio premio) {
+        int costo = premio.calcularCostoFinal(diaFestivo);
+
+        if (this.saldoTickets >= costo) {
+            this.saldoTickets -= costo;
+            System.out.println("Has comprado: " + premio.getTitulo() + " por " + costo + " tickets.");
+            System.out.println("Tickets restantes: " + this.saldoTickets);
+            return true;
+        } else {
+            System.out.println("No tienes suficientes tickets para este premio.");
             return false;
         }
     }
-
-
 }
